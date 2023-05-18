@@ -13,6 +13,11 @@ const readLine = () => {
     return readline.question('> ');
 }
 
+const isQuit = (str) => {
+    return ["q", "quit", "exit", "done"].includes(str.toLowerCase())
+}
+
+
 const configuration = new Configuration({
   apiKey: process.env.OPENAI_API_KEY,
 });
@@ -27,6 +32,9 @@ async function repl(opts) {
     
     while (true) {
         const prompt = readLine();
+        if (isQuit(prompt)) {
+            break;
+        }
         messages.push({"role": "user", "content": prompt});
         try {
             const completion = await openai.createChatCompletion({

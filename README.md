@@ -1,5 +1,7 @@
 # openai-nodejs-playground
 
+## demo
+
 ## resources
 
 - https://platform.openai.com/
