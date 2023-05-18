@@ -1,9 +1,9 @@
+import { program } from 'commander';
 import { Configuration, OpenAIApi } from "openai";
 import fs from 'fs';
 import readline from 'readline-sync';
 import dotenv from 'dotenv'
 dotenv.config();
-
 
 const saveStringToFile = (str, filename) => {
     fs.writeFileSync(filename, str);
@@ -18,11 +18,12 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-const messages = []
 
-async function main() {
+async function repl(opts) {
+
+    const messages = []
     
-    messages.push({"role": "system", "content": "You are a helpful assistant."});
+    messages.push({"role": "system", "content": opts.systemPrompt});
     
     while (true) {
         const prompt = readLine();
@@ -42,5 +43,13 @@ async function main() {
     }
 }
 
-main();
+program
+  .command('repl')
+  .description('ChatGPT REPL')
+  .addArgument(new program.Argument('[systemPrompt]', 'System prompt').default('You are a helpful assistant.'))
+  .action(async (systemPrompt) => {
+    await repl({systemPrompt});
+  });
+
+  program.parse();
     
